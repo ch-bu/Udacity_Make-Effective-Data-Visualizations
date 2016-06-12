@@ -1,0 +1,26 @@
+
+
+.axis  {
+
+  path, line {
+    fill: none;
+    stroke: #ddd;
+    shape-rendering: cripsEdges;
+  }
+
+  text {
+    font: 0.8em sans-serif;
+    // transform: rotate(90deg);
+  }
+
+  .x-axis-text {
+    font: 0.1rem;
+    transform: rotate(90deg);
+  }
+
+}
+
+.bar {
+  fill: #623954;
+}
+
