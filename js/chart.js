@@ -77,7 +77,7 @@ function draw(data) {
                 .duration(200)
                 .style("opacity", 0.9);
             div.html(d.week)
-                .style("left", (d3.event.pageX) + "px")
+                .style("left", (d3.event.pageX + 5) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
 
             hours.text(Number(d.duration).toFixed(1) + " h");

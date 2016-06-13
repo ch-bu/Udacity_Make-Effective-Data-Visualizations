@@ -1,3 +1,6 @@
+/*
+ * X and Y axis
+ */
 .axis path, .axis line {
   fill: none;
   stroke: #ddd;
@@ -6,9 +9,30 @@
 .axis text {
   font: 0.8em sans-serif; }
 
-.axis .x-axis-text {
-  font: 0.1rem;
-  transform: rotate(90deg); }
-
+/*
+ * Bar for barchart
+ */
 .bar {
-  fill: #623954; }
+  fill: #7570b3;
+  stroke: #ddd; }
+  .bar:hover {
+    fill: #1b9e77; }
+
+.label {
+  fill: #ddd;
+  font-size: 0.8rem; }
+
+/*
+ * Tooltip
+ */
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 100px;
+  height: 15px;
+  padding: 4px;
+  font: 12px sans-serif;
+  background: #1b9e77;
+  border: 0px;
+  pointer-events: none;
+  color: #fff; }
