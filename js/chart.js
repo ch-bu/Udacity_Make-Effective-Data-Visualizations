@@ -1,7 +1,7 @@
 // Set variables
-var margin = {top: 40, right: 20, bottom: 80, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+var margin = {top: 40, right: 20, bottom: 140, left: 40},
+    width = 1400 - margin.left - margin.right,
+    height = 700 - margin.top - margin.bottom;
 
 // Scale x axis
 var x = d3.scale.ordinal()
@@ -15,10 +15,16 @@ var y = d3.scale.linear()
 var xAxis = d3.svg.axis()
     .scale(x)
     .orient('bottom');
+    // .innerTickSize(-height)
+    // .outerTickSize(0)
+    // .tickPadding(10);
 
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient('left');
+    // .innerTickSize(-width)
+    // .outerTickSize(0)
+    // .tickPadding(10);
 
 // Append svg
 var svg = d3.select("body").append("svg")
@@ -26,6 +32,11 @@ var svg = d3.select("body").append("svg")
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// Define the div for the tooltip
+var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
 
 
 function draw(data) {
@@ -37,15 +48,17 @@ function draw(data) {
     x.domain(data.map(function(d) { return d.week; }));
     y.domain([0, d3.max(data, function(d) { return d.duration; })]);
 
-    // Append axis to svg
+    // Append x-axis to svg
     svg.append("g")
         .attr("class", "x axis")
         // Translate axis to the bottom of svg
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
         .selectAll("text")
-        .attr('class', 'x-axis-text');
-        //.attr("x", 0);
+        .attr("y", -2)
+        .attr("x", 30)
+        .attr("transform", "rotate(90)")
+        .style("font-size", "0.2rem");
 
     // Append y-axis to svg
     svg.append("g")
@@ -61,7 +74,27 @@ function draw(data) {
         .attr('x', function(d) { return x(d.week); })
         .attr('width', x.rangeBand())
         .attr('y', function(d) { return y(d.duration); })
-        .attr('height', function(d) { return height - y(d.duration); });
+        .attr('height', function(d) { return height - y(d.duration); })
+        .on("mouseover", function(d) {
+            div.transition();
+        });
+
+    // Add an x-axis label.
+    svg.append("text")
+        .attr("class", "label")
+        .attr("text-anchor", "end")
+        .attr("x", width)
+        .attr("y", height - 6)
+        .text("Month of the year");
+
+    // Add a y-axis label.
+    svg.append("text")
+        .attr("class", "label")
+        .attr("text-anchor", "end")
+        .attr("y", 6)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("weekly work (hours)");
 
     // debugger;
 

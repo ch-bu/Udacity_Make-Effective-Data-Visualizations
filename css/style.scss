@@ -1,5 +1,11 @@
+$primary-color: #7570b3;
+$secondary-color: #1b9e77;
+$stroke-color: #ddd;
 
 
+/*
+ * X and Y axis
+ */
 .axis  {
 
   path, line {
@@ -10,17 +16,40 @@
 
   text {
     font: 0.8em sans-serif;
-    // transform: rotate(90deg);
-  }
-
-  .x-axis-text {
-    font: 0.1rem;
-    transform: rotate(90deg);
   }
 
 }
 
+/*
+ * Bar for barchart
+ */
 .bar {
-  fill: #623954;
+  fill: $primary-color;
+  stroke: $stroke-color;
+
+  &:hover {
+    fill: $secondary-color;
+  }
 }
 
+.label {
+  fill: #000;
+  font-size: 0.8rem;
+}
+
+/*
+ * Tooltip
+ */
+
+div.tooltip { 
+    position: absolute;     
+    text-align: center;     
+    width: 60px;          
+    height: 28px;         
+    padding: 2px;       
+    font: 12px sans-serif;    
+    background: lightsteelblue; 
+    border: 0px;    
+    border-radius: 8px;     
+    pointer-events: none;     
+}

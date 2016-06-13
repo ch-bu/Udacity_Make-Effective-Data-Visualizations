@@ -16,6 +16,8 @@
 * http://bl.ocks.org/Caged/6476579
 * http://bl.ocks.org/mbostock/3885705
 * http://bl.ocks.org/mbostock/3943967
+* [Axis legend](https://bost.ocks.org/mike/nations/)
+* [Grid](http://bl.ocks.org/hunzy/11110940)
 
 
 <!-- Work 
