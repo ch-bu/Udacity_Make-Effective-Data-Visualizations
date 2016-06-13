@@ -14,7 +14,8 @@ var y = d3.scale.linear()
 // Add axis
 var xAxis = d3.svg.axis()
     .scale(x)
-    .orient('bottom');
+    .orient('bottom')
+    .tickFormat("");
     // .innerTickSize(-height)
     // .outerTickSize(0)
     // .tickPadding(10);
@@ -34,8 +35,9 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // Define the div for the tooltip
-var div = d3.select("body").append("div")   
-    .attr("class", "tooltip")               
+var div = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
     .style("opacity", 0);
 
 
@@ -53,12 +55,7 @@ function draw(data) {
         .attr("class", "x axis")
         // Translate axis to the bottom of svg
         .attr("transform", "translate(0," + height + ")")
-        .call(xAxis)
-        .selectAll("text")
-        .attr("y", -2)
-        .attr("x", 30)
-        .attr("transform", "rotate(90)")
-        .style("font-size", "0.2rem");
+        .call(xAxis);
 
     // Append y-axis to svg
     svg.append("g")
@@ -76,15 +73,35 @@ function draw(data) {
         .attr('y', function(d) { return y(d.duration); })
         .attr('height', function(d) { return height - y(d.duration); })
         .on("mouseover", function(d) {
-            div.transition();
+            div.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+            div.html(d.week)
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+
+            hours.text(Number(d.duration).toFixed(1) + " h");
+        })
+        .on("mouseout", function(d) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+
+            hours.text("");
         });
+
+    // Div for weekly hours
+    var hours = svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height - (height - 100))
+        .attr("font-size", "5rem");
 
     // Add an x-axis label.
     svg.append("text")
         .attr("class", "label")
         .attr("text-anchor", "end")
         .attr("x", width)
-        .attr("y", height - 6)
+        .attr("y", height + 20)
         .text("Month of the year");
 
     // Add a y-axis label.
