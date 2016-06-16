@@ -13,10 +13,9 @@
  * Bar for barchart
  */
 .bar {
-  fill: #7570b3;
   stroke: #ddd; }
   .bar:hover {
-    fill: #1b9e77; }
+    fill: #000; }
 
 .label {
   fill: #ddd;
@@ -31,8 +30,8 @@ div.tooltip {
   width: 100px;
   height: 15px;
   padding: 4px;
-  font: 12px sans-serif;
-  background: #1b9e77;
+  font: 0.8rem sans-serif;
+  background: #000;
   border: 0px;
   pointer-events: none;
   color: #fff; }

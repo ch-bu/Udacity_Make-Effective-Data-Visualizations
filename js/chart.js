@@ -2,10 +2,12 @@
 var margin = {top: 40, right: 20, bottom: 140, left: 40},
     width = 1400 - margin.left - margin.right,
     height = 700 - margin.top - margin.bottom;
+var categorialColors = d3.scale.category10();
 
 // Scale x axis
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width]);
+
 
 // Scale y axis
 var y = d3.scale.linear()
@@ -69,6 +71,20 @@ function draw(data) {
         .append('rect')
         .attr('class', 'bar')
         .attr('x', function(d) { return x(d.week); })
+        .attr('fill', function(d) {
+            console.log(d);
+
+            if (d['Jahr'] == '2015') {
+                return categorialColors(1);
+            } else if (d['Jahr'] == '2016') {
+                return categorialColors(2);
+            } else if (d['Jahr'] == '2014') {
+                return categorialColors(3);
+            } else if (d['Jahr'] == '2013') {
+                return categorialColors(4);
+            }
+
+        })
         .attr('width', x.rangeBand())
         .attr('y', function(d) { return y(d.duration); })
         .attr('height', function(d) { return height - y(d.duration); })
@@ -113,7 +129,40 @@ function draw(data) {
         .attr("transform", "rotate(-90)")
         .text("weekly work (hours)");
 
-    // debugger;
+
+    // Event listener for checkbox
+    d3.select("input").on("change", change);
+
+
+    function change() {
+        /*
+         * Sorts the x axis from ascending
+         */
+
+        // Rearrange domain
+        var x0 = x.domain(data.sort(this.checked
+            ? function(a, b) { return b.duration - a.duration; }
+            : function(a, b) { return d3.ascending(a.week, b.week); })
+            .map(function(d) { return d.week; }))
+            .copy();
+
+        // 
+        svg.selectAll(".bar")
+            .sort(function(a, b) { return x0(a.week) - x0(b.week); });
+
+        var transition = svg.transition().duration(100),
+            delay = function(d, i) { return i * 50; };
+
+        transition.selectAll(".bar")
+            .delay(delay)
+            .attr("x", function(d) { return x0(d.week); });
+
+        transition.select(".axis")
+            .call(xAxis)
+            .selectAll("g")
+            .delay(delay);
+
+    }
 
 }
 

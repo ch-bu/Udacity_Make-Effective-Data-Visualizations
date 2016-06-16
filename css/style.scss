@@ -24,11 +24,11 @@ $stroke-color: #ddd;
  * Bar for barchart
  */
 .bar {
-  fill: $primary-color;
+  // fill: $primary-color;
   stroke: $stroke-color;
 
   &:hover {
-    fill: $secondary-color;
+    fill: #000;
   }
 }
 
@@ -47,8 +47,8 @@ div.tooltip {
     width: 100px;          
     height: 15px;         
     padding: 4px;       
-    font: 12px sans-serif; 
-    background: $secondary-color; 
+    font: 0.8rem sans-serif; 
+    background: #000; 
     border: 0px;       
     pointer-events: none;    
     color: #fff; 
