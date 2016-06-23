@@ -28,7 +28,7 @@ $stroke-color: #ddd;
   stroke: $stroke-color;
 
   &:hover {
-    fill: #000;
+    fill: green;
   }
 }
 
@@ -44,12 +44,12 @@ $stroke-color: #ddd;
 div.tooltip { 
     position: absolute;     
     text-align: center;     
-    width: 100px;          
-    height: 15px;         
+    width: 150px;          
+    height: 55px;         
     padding: 4px;       
-    font: 0.8rem sans-serif; 
-    background: #000; 
+    font: 1.2rem sans-serif; 
+    background: #fff; 
     border: 0px;       
     pointer-events: none;    
-    color: #fff; 
+    color: #000; 
 }

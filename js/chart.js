@@ -2,7 +2,7 @@
 var margin = {top: 40, right: 20, bottom: 140, left: 40},
     width = 1400 - margin.left - margin.right,
     height = 700 - margin.top - margin.bottom;
-var categorialColors = d3.scale.category10();
+var categorialColors = d3.scale.category20b();
 
 // Scale x axis
 var x = d3.scale.ordinal()
@@ -64,54 +64,6 @@ function draw(data) {
         .attr("class", "y axis")
         .call(yAxis);
 
-    // Add bar chart
-    var bar = svg.selectAll('.bar')
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr('class', 'bar')
-        .attr('x', function(d) { return x(d.week); })
-        .attr('fill', function(d) {
-            console.log(d);
-
-            if (d['Jahr'] == '2015') {
-                return categorialColors(1);
-            } else if (d['Jahr'] == '2016') {
-                return categorialColors(2);
-            } else if (d['Jahr'] == '2014') {
-                return categorialColors(3);
-            } else if (d['Jahr'] == '2013') {
-                return categorialColors(4);
-            }
-
-        })
-        .attr('width', x.rangeBand())
-        .attr('y', function(d) { return y(d.duration); })
-        .attr('height', function(d) { return height - y(d.duration); })
-        .on("mouseover", function(d) {
-            div.transition()
-                .duration(200)
-                .style("opacity", 0.9);
-            div.html(d.week)
-                .style("left", (d3.event.pageX + 5) + "px")
-                .style("top", (d3.event.pageY - 28) + "px");
-
-            hours.text(Number(d.duration).toFixed(1) + " h");
-        })
-        .on("mouseout", function(d) {
-            div.transition()
-                .duration(500)
-                .style("opacity", 0);
-
-            hours.text("");
-        });
-
-    // Div for weekly hours
-    var hours = svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", height - (height - 100))
-        .attr("font-size", "5rem");
-
     // Add an x-axis label.
     svg.append("text")
         .attr("class", "label")
@@ -129,6 +81,57 @@ function draw(data) {
         .attr("transform", "rotate(-90)")
         .text("weekly work (hours)");
 
+    // Add bar chart
+    var bar = svg.selectAll('.bar')
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .attr('x', function(d) { return x(d.week); })
+        .attr('fill', function(d) {
+
+            if (d['year'] == '2015') {
+                return categorialColors(1);
+            } else if (d['year'] == '2016') {
+                return categorialColors(2);
+            } else if (d['year'] == '2014') {
+                return categorialColors(3);
+            } else if (d['year'] == '2013') {
+                return categorialColors(4);
+            }
+
+        })
+        .attr('width', x.rangeBand())
+        .attr('y', function(d) { return y(d.duration); })
+        .attr('height', function(d) { return height - y(d.duration); })
+        .on("mouseover", function(d) {
+            
+            // Smooth transition on mouseover
+            div.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+
+            // Append text to div
+            div.html(d.week)
+                .style("left", (d3.event.pageX + 5) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+
+            // Round hours to nearest tenth
+            hours.text(Number(d.duration).toFixed(1) + " h");
+        })
+        .on("mouseout", function(d) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+
+            hours.text("");
+        });
+
+    // Div for weekly hours
+    var hours = svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height - (height - 100))
+        .attr("font-size", "5rem");
 
     // Event listener for checkbox
     d3.select("input").on("change", change);
@@ -150,8 +153,8 @@ function draw(data) {
         svg.selectAll(".bar")
             .sort(function(a, b) { return x0(a.week) - x0(b.week); });
 
-        var transition = svg.transition().duration(100),
-            delay = function(d, i) { return i * 50; };
+        var transition = svg.transition().duration(50),
+            delay = function(d, i) { return i * 20; };
 
         transition.selectAll(".bar")
             .delay(delay)
@@ -164,10 +167,18 @@ function draw(data) {
 
     }
 
+    d3.selectAll('.bar').data(data).exit().remove();
+
+    // var newData = d3.selectAll('.bar').filter(function(d) {
+    //     console.log(d.year == 2014);
+    //     return d.year == 2014;
+    // });
+
 }
 
 function type(d) {
     d.duration = +d.duration;
+    d.year = +d.year;
     return d;
 }
 
