@@ -179,7 +179,32 @@ function createYearCards(data) {
         cardDiv.append(rendered);
     }
 
+    // Add hover functionality
+    $('.card').hover(function(obj) {
+
+        console.log(obj);
+
+        // Find year from card mouse is over
+        var year = Number($(obj.target).find("span").text());
+
+        d3.selectAll('.bar')
+            .filter(function(d) {
+                return d.year == year;
+            })
+            .transition()
+            .duration(400).
+            style('fill', '#226764');
+
+    }, function(obj) {
+
+        d3.selectAll('.bar')
+            .transition()
+            .duration(200).
+            style('fill', '#A8383B');
+    });
+
 }
+
 
 
 function type(d) {

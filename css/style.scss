@@ -41,11 +41,11 @@ p {
  * Bar for barchart
  */
 .bar {
-  fill: $secondary-color;
+  fill: $primary-color;
   stroke: $stroke-color;
 
   &:hover {
-    fill: $primary-color;
+    fill: $secondary-color;
   }
 }
 
@@ -78,6 +78,10 @@ svg {
 
 #histogram {
   max-width: 100%;
+}
+
+#cards {
+  padding-top: 30px;
 }
 
 .card {

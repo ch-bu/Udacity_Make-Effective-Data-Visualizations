@@ -27,10 +27,10 @@ p {
  * Bar for barchart
  */
 .bar {
-  fill: #226764;
+  fill: #A8383B;
   stroke: #ddd; }
   .bar:hover {
-    fill: #A8383B; }
+    fill: #226764; }
 
 .label {
   fill: #ddd;
@@ -57,6 +57,9 @@ svg {
 
 #histogram {
   max-width: 100%; }
+
+#cards {
+  padding-top: 30px; }
 
 .card {
   overflow: hidden;
