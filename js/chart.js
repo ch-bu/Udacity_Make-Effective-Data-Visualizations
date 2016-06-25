@@ -2,35 +2,29 @@
 var margin = {top: 40, right: 20, bottom: 140, left: 40},
     width = 1400 - margin.left - margin.right,
     height = 700 - margin.top - margin.bottom;
+
 var categorialColors = d3.scale.category20b();
 
 // Scale x axis
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width]);
 
-
 // Scale y axis
 var y = d3.scale.linear()
     .range([height, 0]);
 
-// Add axis
+// Add axes
 var xAxis = d3.svg.axis()
     .scale(x)
     .orient('bottom')
     .tickFormat("");
-    // .innerTickSize(-height)
-    // .outerTickSize(0)
-    // .tickPadding(10);
 
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient('left');
-    // .innerTickSize(-width)
-    // .outerTickSize(0)
-    // .tickPadding(10);
 
 // Append svg
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#histogram").append('svg')
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -81,26 +75,15 @@ function draw(data) {
         .attr("transform", "rotate(-90)")
         .text("weekly work (hours)");
 
-    // Add bar chart
+    // Bind data to nonexisting bars
     var bar = svg.selectAll('.bar')
-        .data(data)
-        .enter()
+        .data(data);
+     
+    // Add bars to chart    
+    bar.enter()
         .append('rect')
         .attr('class', 'bar')
         .attr('x', function(d) { return x(d.week); })
-        .attr('fill', function(d) {
-
-            if (d['year'] == '2015') {
-                return categorialColors(1);
-            } else if (d['year'] == '2016') {
-                return categorialColors(2);
-            } else if (d['year'] == '2014') {
-                return categorialColors(3);
-            } else if (d['year'] == '2013') {
-                return categorialColors(4);
-            }
-
-        })
         .attr('width', x.rangeBand())
         .attr('y', function(d) { return y(d.duration); })
         .attr('height', function(d) { return height - y(d.duration); })
@@ -154,7 +137,7 @@ function draw(data) {
             .sort(function(a, b) { return x0(a.week) - x0(b.week); });
 
         var transition = svg.transition().duration(50),
-            delay = function(d, i) { return i * 20; };
+            delay = function(d, i) { return i * 10; };
 
         transition.selectAll(".bar")
             .delay(delay)
@@ -167,14 +150,37 @@ function draw(data) {
 
     }
 
-    d3.selectAll('.bar').data(data).exit().remove();
+    // d3.selectAll('.bar').data(data).exit().remove();
+    bar.exit().remove();
 
     // var newData = d3.selectAll('.bar').filter(function(d) {
     //     console.log(d.year == 2014);
     //     return d.year == 2014;
     // });
 
+    createYearCards(data);
+
 }
+
+function createYearCards(data) {
+
+    // Get unique years
+    var uniqueYears = d3.map(data, function(d) { return d.year; }).keys();
+
+    // Get card div
+    var cardDiv = $('#cards');
+
+    // Card template
+    var card = document.getElementById('card').innerHTML;
+
+    // Append years to dom
+    for (year in uniqueYears) {
+        var rendered = Mustache.render(card, {year: uniqueYears[year]});
+        cardDiv.append(rendered);
+    }
+
+}
+
 
 function type(d) {
     d.duration = +d.duration;

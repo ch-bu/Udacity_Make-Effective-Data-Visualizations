@@ -1,7 +1,24 @@
-$primary-color: #7570b3;
-$secondary-color: #1b9e77;
+$primary-color: #A8383B;
+$secondary-color: #226764;
 $stroke-color: #ddd;
 
+
+body {
+  font-family: 'Taviraj', serif;
+}
+
+h1 {
+  font-family: 'Taviraj', serif;
+  text-align: center;
+  font-weight: bold;
+  padding: 20px;
+  color: $primary-color;
+}
+
+p {
+  font-weight: normal;
+  font-size: 1.6rem;
+}
 
 /*
  * X and Y axis
@@ -24,11 +41,11 @@ $stroke-color: #ddd;
  * Bar for barchart
  */
 .bar {
-  // fill: $primary-color;
+  fill: $secondary-color;
   stroke: $stroke-color;
 
   &:hover {
-    fill: green;
+    fill: $primary-color;
   }
 }
 
@@ -52,4 +69,51 @@ div.tooltip {
     border: 0px;       
     pointer-events: none;    
     color: #000; 
+}
+
+svg {
+  display: block;
+  margin: 0 auto;
+}
+
+#histogram {
+  max-width: 100%;
+}
+
+.card {
+  
+  overflow: hidden;
+  text-align: center;
+  color: #272727;
+  border-radius: 2px;
+  margin-bottom: 20px;
+
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+  &:hover {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+
+  }
+
+  span {
+    &:hover {
+      cursor: default;
+    }
+  }
+
+  .title {
+    line-height: 3rem;
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+
+  .content {
+    padding: 1.3rem;
+    font-weight: 300;
+    border-radius: 0 0 2px 2px;
+  }
+
+  p {
+    margin: 0;
+  }
 }
