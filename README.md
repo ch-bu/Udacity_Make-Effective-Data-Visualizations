@@ -26,6 +26,7 @@ One user thought that the bars were clickable, although I did not use a hand cur
 * [Sort functionality](http://bl.ocks.org/mbostock/3943967)
 * [Axis legend](https://bost.ocks.org/mike/nations/)
 * [Grid](http://bl.ocks.org/hunzy/11110940)
+* [Update barcharts](https://bl.ocks.org/RandomEtc/cff3610e7dd47bef2d01)
 
 
 <!-- Work 
