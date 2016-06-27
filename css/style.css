@@ -28,9 +28,7 @@ p {
  */
 .bar {
   fill: #A8383B;
-  stroke: #ddd; }
-  .bar:hover {
-    fill: #226764; }
+  stroke: #a8a8a8; }
 
 .label {
   fill: #ddd;
@@ -61,6 +59,9 @@ svg {
 #cards {
   padding-top: 30px; }
 
+/*
+ * Card for every year
+ */
 .card {
   overflow: hidden;
   text-align: center;

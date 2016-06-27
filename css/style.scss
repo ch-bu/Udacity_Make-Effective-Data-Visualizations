@@ -1,6 +1,6 @@
 $primary-color: #A8383B;
 $secondary-color: #226764;
-$stroke-color: #ddd;
+$stroke-color: #a8a8a8;
 
 
 body {
@@ -44,9 +44,9 @@ p {
   fill: $primary-color;
   stroke: $stroke-color;
 
-  &:hover {
-    fill: $secondary-color;
-  }
+  // &:hover {
+  //   fill: $secondary-color;
+  // }
 }
 
 .label {
@@ -84,6 +84,9 @@ svg {
   padding-top: 30px;
 }
 
+/*
+ * Card for every year
+ */
 .card {
   
   overflow: hidden;
