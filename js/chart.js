@@ -101,6 +101,13 @@ function draw(data) {
      * Draw graph 
      */
 
+
+    // Uncheck checkbox
+    // var checkbox = $("#myCheckbox");
+    // if (checkbox.prop("checked")) {
+    //     checkbox.prop("checked", false);
+    // }
+
     // Specify domains
     x.domain(data.map(function(d) { return d.week; }));
     y.domain([0, d3.max(data, function(d) { return d.duration; })]);
@@ -132,6 +139,7 @@ function draw(data) {
         .attr('height', function(d) { return height - y(d.duration); })
         .on("mouseover", function(currWeek) {
             
+            // Color current week
             d3.selectAll('.bar')
                 .filter(function(d) {
                     return d.week == currWeek.week;
@@ -143,11 +151,14 @@ function draw(data) {
         })
         .on("mouseout", function(d) {
 
+            // Reapply normal color on mouseout
             d3.selectAll('.bar')
                 .style("fill", "#A8383B");
 
+            // Empty text box
             hours.text("");
         });
+
 
     // Update set
     bar.transition().duration(300)
@@ -194,8 +205,8 @@ function draw(data) {
         svg.selectAll(".bar")
             .sort(function(a, b) { return x0(a.week) - x0(b.week); });
 
-        var transition = svg.transition().duration(50),
-            delay = function(d, i) { return i * 10; };
+        var transition = svg.transition().duration(50);
+        var delay = function(d, i) { return i * 10; };
  
         transition.selectAll(".bar")
             .delay(delay)
@@ -207,7 +218,6 @@ function draw(data) {
             .delay(delay);
 
     }
-
 }
 
 function createYearCards(data) {
@@ -235,26 +245,26 @@ function addHandlers() {
      */
 
     // Add hover functionality
-    $('.card').hover(function(obj) {
+    // $('.card').hover(function(obj) {
 
-        // Find year from card mouse is over
-        var year = Number($(obj.target).find("span").text());
+    //     // Find year from card mouse is over
+    //     var year = Number($(obj.target).find("span").text());
 
-        d3.selectAll('.bar')
-            .filter(function(d) {
-                return d.year == year;
-            })
-            .transition()
-            .duration(400).
-            style('fill', '#226764');
+    //     d3.selectAll('.bar')
+    //         .filter(function(d) {
+    //             return d.year == year;
+    //         })
+    //         .transition()
+    //         .duration(400).
+    //         style('fill', '#226764');
 
-    }, function(obj) {
+    // }, function(obj) {
 
-        d3.selectAll('.bar')
-            .transition()
-            .duration(200).
-            style('fill', '#A8383B');
-    });
+    //     d3.selectAll('.bar')
+    //         .transition()
+    //         .duration(200).
+    //         style('fill', '#A8383B');
+    // });
 
     // Add click event to cards
     $('.card').click(function(obj) {
@@ -262,10 +272,18 @@ function addHandlers() {
         // Remove events for cards
         $('.card').off();
 
-        // Find year from card mouse is over
-        var year = Number($(obj.target).find("span").text());
+        // Get target element
+        var targetElement = $(obj.target);
+        var year = null;
 
-        // Update data
+        // Target is div
+        if (targetElement.is("div")) {
+            year = Number(targetElement.find("span").text());
+        } else if (targetElement.is("span")) {
+            year = Number(targetElement.text());
+        }
+
+        // // Update data
         var dataSelection = weekData.filter(function(d) {
             return d.year == year;
         });
