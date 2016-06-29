@@ -65,6 +65,7 @@ var div = d3.select("body")
 
 // Saves the whole data set
 var weekData = null;
+var currData = null;
 
 
 function saveData(data) {
@@ -80,6 +81,9 @@ function saveData(data) {
 
     // Add click event for all time data
     clickAllTimeEvent();
+
+    // Event listener for checkbox
+    d3.select("input").on("change", change);
 }
 
 function clickAllTimeEvent() {
@@ -90,6 +94,10 @@ function clickAllTimeEvent() {
      // Add click event to cards
     $('#allWeeksCard').click(function(obj) {
 
+        // Remove class
+        $('.card').children().removeClass("currentCard");
+
+        // Draw barchart with whole data
         draw(weekData);
 
     });
@@ -101,16 +109,29 @@ function draw(data) {
      * Draw graph 
      */
 
+    // Assign current selection to currData variable
+    currData = data;
 
     // Uncheck checkbox
-    // var checkbox = $("#myCheckbox");
+    var sortChecked = $("#myCheckbox").prop("checked");
     // if (checkbox.prop("checked")) {
     //     checkbox.prop("checked", false);
+    //     change();
     // }
 
     // Specify domains
     x.domain(data.map(function(d) { return d.week; }));
     y.domain([0, d3.max(data, function(d) { return d.duration; })]);
+
+    // Sort data according to checkbox
+    var x0 = x.domain(currData.sort(sortChecked
+        ? function(a, b) { return b.duration - a.duration; }
+        : function(a, b) { return d3.ascending(a.week, b.week); })
+        .map(function(d) { return d.week; }))
+        .copy();
+
+    svg.selectAll(".bar")
+        .sort(function(a, b) { return x0(a.week) - x0(b.week); });
 
     // Append x-axis to svg
     svg.select(".x.axis").transition().duration(300).call(xAxis);
@@ -184,43 +205,46 @@ function draw(data) {
     setTimeout(function() {
         addHandlers();
     }, 500);
-    
 
-    // Event listener for checkbox
-    d3.select("input").on("change", change);
-
-
-    function change() {
-        /*
-         * Sorts the x axis from ascending
-         */
-
-        // Rearrange domain
-        var x0 = x.domain(data.sort(this.checked
-            ? function(a, b) { return b.duration - a.duration; }
-            : function(a, b) { return d3.ascending(a.week, b.week); })
-            .map(function(d) { return d.week; }))
-            .copy();
-
-        svg.selectAll(".bar")
-            .sort(function(a, b) { return x0(a.week) - x0(b.week); });
-
-        var transition = svg.transition().duration(50);
-        var delay = function(d, i) { return i * 10; };
- 
-        transition.selectAll(".bar")
-            .delay(delay)
-            .attr("x", function(d) { return x0(d.week); });
-
-        transition.select(".axis")
-            .call(xAxis)
-            .selectAll("g")
-            .delay(delay);
-
-    }
 }
 
+
+function change() {
+    /*
+     * Sorts the x axis from ascending
+     */
+
+    // Rearrange domain
+    var x0 = x.domain(currData.sort(this.checked
+        ? function(a, b) { return b.duration - a.duration; }
+        : function(a, b) { return d3.ascending(a.week, b.week); })
+        .map(function(d) { return d.week; }))
+        .copy();
+
+    svg.selectAll(".bar")
+        .sort(function(a, b) { return x0(a.week) - x0(b.week); });
+
+    var transition = svg.transition().duration(50);
+    var barDelay = function(d, i) {
+        return i * 10;
+    };
+
+    transition.selectAll(".bar")
+        .delay(barDelay)
+        .attr("x", function(d) { return x0(d.week); });
+
+    transition.select(".axis")
+        .call(xAxis)
+        .selectAll("g")
+        .delay(barDelay);
+
+}
+
+
 function createYearCards(data) {
+    /*
+     * Creates cards for every year in data
+     */
 
     // Get unique years
     var uniqueYears = d3.map(data, function(d) { return d.year; }).keys();
@@ -239,35 +263,39 @@ function createYearCards(data) {
 
 }
 
+
 function addHandlers() {
     /*
      * Add event listeners for cards
      */
 
     // Add hover functionality
-    // $('.card').hover(function(obj) {
+    $('.card').hover(function(obj) {
 
-    //     // Find year from card mouse is over
-    //     var year = Number($(obj.target).find("span").text());
+        // Find year from card mouse is over
+        var year = Number($(obj.target).find("span").text());
 
-    //     d3.selectAll('.bar')
-    //         .filter(function(d) {
-    //             return d.year == year;
-    //         })
-    //         .transition()
-    //         .duration(400).
-    //         style('fill', '#226764');
+        d3.selectAll('.bar')
+            .filter(function(d) {
+                return d.year == year;
+            })
+            .transition()
+            .duration(400).
+            style('fill', '#226764');
 
-    // }, function(obj) {
+    }, function(obj) {
 
-    //     d3.selectAll('.bar')
-    //         .transition()
-    //         .duration(200).
-    //         style('fill', '#A8383B');
-    // });
+        d3.selectAll('.bar')
+            .transition()
+            .duration(200).
+            style('fill', '#A8383B');
+    });
 
     // Add click event to cards
     $('.card').click(function(obj) {
+
+        // Remove class
+        $('.card').children().removeClass("currentCard");
 
         // Remove events for cards
         $('.card').off();
@@ -278,8 +306,11 @@ function addHandlers() {
 
         // Target is div
         if (targetElement.is("div")) {
+            targetElement.addClass("currentCard");
             year = Number(targetElement.find("span").text());
+        // Target element is span
         } else if (targetElement.is("span")) {
+            targetElement.parent().addClass("currentCard");
             year = Number(targetElement.text());
         }
 
@@ -290,6 +321,7 @@ function addHandlers() {
 
         // Draw barchart
         draw(dataSelection);
+
 
     });
 }

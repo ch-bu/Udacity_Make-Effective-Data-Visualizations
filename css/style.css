@@ -83,3 +83,29 @@ svg {
     border-radius: 0 0 2px 2px; }
   .card p {
     margin: 0; }
+
+#allYearCard {
+  overflow: hidden;
+  text-align: center;
+  color: #272727;
+  border-radius: 2px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  #allYearCard:hover {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); }
+  #allYearCard span:hover {
+    cursor: default; }
+  #allYearCard .title {
+    line-height: 3rem;
+    font-size: 1.5rem;
+    font-weight: 300; }
+  #allYearCard .content {
+    padding: 1.3rem;
+    font-weight: 300;
+    border-radius: 0 0 2px 2px; }
+  #allYearCard p {
+    margin: 0; }
+
+.currentCard {
+  background-color: #226764;
+  color: #fff; }

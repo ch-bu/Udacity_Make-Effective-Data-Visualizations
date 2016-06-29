@@ -87,8 +87,10 @@ svg {
 /*
  * Card for every year
  */
-.card {
-  
+
+
+@mixin card() {
+
   overflow: hidden;
   text-align: center;
   color: #272727;
@@ -123,4 +125,18 @@ svg {
   p {
     margin: 0;
   }
+}
+
+.card {
+  @include card();
+
+}
+
+#allYearCard {
+  @include card();
+}
+
+.currentCard {
+  background-color: $secondary-color;
+  color: #fff;
 }
