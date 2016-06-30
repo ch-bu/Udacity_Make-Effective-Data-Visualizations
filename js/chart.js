@@ -1,7 +1,9 @@
 // Set variables
-var margin = {top: 40, right: 20, bottom: 140, left: 40},
+var margin = {top: 70, right: 20, bottom: 40, left: 40},
     width = 1200 - margin.left - margin.right,
     height = 700 - margin.top - margin.bottom;
+
+var weekSummary = $("#weekSummary");
 
 var categorialColors = d3.scale.category20b();
 
@@ -16,15 +18,15 @@ var y = d3.scale.linear()
 // Add axes
 var xAxis = d3.svg.axis()
     .scale(x)
-    .orient('bottom')
+    .orient("bottom")
     .tickFormat("");
 
 var yAxis = d3.svg.axis()
     .scale(y)
-    .orient('left');
+    .orient("left");
 
 // Append svg
-var svg = d3.select("#barchart").append('svg')
+var svg = d3.select("#barchart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -68,6 +70,12 @@ var weekData = null;
 var currData = null;
 
 
+d3.selection.prototype.moveToFront = function() {
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
+};
+
 function saveData(data) {
 
     // Assign data to weekData variable
@@ -92,10 +100,10 @@ function clickAllTimeEvent() {
      */
 
      // Add click event to cards
-    $('#allWeeksCard').click(function(obj) {
+    $("#allWeeksCard").click(function(obj) {
 
         // Remove class
-        $('.card').children().removeClass("currentCard");
+        $(".card").children().removeClass("currentCard");
 
         // Draw barchart with whole data
         draw(weekData);
@@ -114,19 +122,17 @@ function draw(data) {
 
     // Uncheck checkbox
     var sortChecked = $("#myCheckbox").prop("checked");
-    // if (checkbox.prop("checked")) {
-    //     checkbox.prop("checked", false);
-    //     change();
-    // }
 
     // Specify domains
     x.domain(data.map(function(d) { return d.week; }));
     y.domain([0, d3.max(data, function(d) { return d.duration; })]);
 
     // Sort data according to checkbox
-    var x0 = x.domain(currData.sort(sortChecked
-        ? function(a, b) { return b.duration - a.duration; }
-        : function(a, b) { return d3.ascending(a.week, b.week); })
+    var x0 = x.domain(currData.sort(sortChecked ? function(a, b) {
+            return b.duration - a.duration;
+        } : function(a, b) {
+            return d3.ascending(a.week, b.week);
+        })
         .map(function(d) { return d.week; }))
         .copy();
 
@@ -138,7 +144,7 @@ function draw(data) {
     svg.select(".y.axis").transition().duration(300).call(yAxis);
 
     // Bind data to nonexisting bars
-    var bar = svg.selectAll('.bar')
+    var bar = svg.selectAll(".bar")
         .data(data);
 
     // Remove unnecessary bars
@@ -147,37 +153,39 @@ function draw(data) {
         .duration(300)
         .attr("y", y(0))
         .attr("height", height - y(0))
-        .style('fill-opacity', 1e-6)
+        .style("fill-opacity", 1e-6)
         .remove();
      
     // Add bars to chart    
     bar.enter()
-        .append('rect')
-        .attr('class', 'bar')
-        .attr('x', function(d) { return x(d.week); })
-        .attr('width', x.rangeBand())
-        .attr('y', function(d) { return y(d.duration); })
-        .attr('height', function(d) { return height - y(d.duration); })
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.week); })
+        .attr("width", x.rangeBand())
+        .attr("y", function(d) { return y(d.duration); })
+        .attr("height", function(d) { return height - y(d.duration); })
         .on("mouseover", function(currWeek) {
             
             // Color current week
-            d3.selectAll('.bar')
+            d3.selectAll(".bar")
                 .filter(function(d) {
                     return d.week == currWeek.week;
                 })
                 .style("fill", "#226764");
 
-            // Round hours to nearest tenth
-            hours.text(currWeek.week + " - " + Number(currWeek.duration).toFixed(1) + " h");
+            weekSummary.text("You worked " +
+                Number(currWeek.duration).toFixed(1) +
+                " hours in week " + currWeek.week.slice(12) +
+                " of " + currWeek.week.slice(0, 4));
+
         })
         .on("mouseout", function(d) {
 
             // Reapply normal color on mouseout
-            d3.selectAll('.bar')
+            d3.selectAll(".bar")
                 .style("fill", "#A8383B");
 
-            // Empty text box
-            hours.text("");
+            weekSummary.text("");
         });
 
 
@@ -189,17 +197,10 @@ function draw(data) {
         .attr("y", function(d) {
             return y(d.duration);
         })
-        .attr('width', x.rangeBand())
+        .attr("width", x.rangeBand())
         .attr("height", function(d) {
             return height - y(d.duration);
         });
-
-    // Div for weekly hours
-    var hours = svg.append("text")
-        .attr("x", 40)
-        .attr("y", height - 10)
-        .attr("font-size", "3rem")
-        .attr("fill", "#fff");
 
     // Add events for cards after a second
     setTimeout(function() {
@@ -215,9 +216,11 @@ function change() {
      */
 
     // Rearrange domain
-    var x0 = x.domain(currData.sort(this.checked
-        ? function(a, b) { return b.duration - a.duration; }
-        : function(a, b) { return d3.ascending(a.week, b.week); })
+    var x0 = x.domain(currData.sort(sortChecked ? function(a, b) {
+            return b.duration - a.duration;
+        } : function(a, b) {
+            return d3.ascending(a.week, b.week);
+        })
         .map(function(d) { return d.week; }))
         .copy();
 
@@ -250,10 +253,10 @@ function createYearCards(data) {
     var uniqueYears = d3.map(data, function(d) { return d.year; }).keys();
 
     // Get card div
-    var cardDiv = $('#cards');
+    var cardDiv = $("#cards");
 
     // Card template
-    var card = document.getElementById('card').innerHTML;
+    var card = document.getElementById("card").innerHTML;
 
     // Append years to dom
     for (year in uniqueYears) {
@@ -270,35 +273,35 @@ function addHandlers() {
      */
 
     // Add hover functionality
-    $('.card').hover(function(obj) {
+    $(".card").hover(function(obj) {
 
         // Find year from card mouse is over
         var year = Number($(obj.target).find("span").text());
 
-        d3.selectAll('.bar')
+        d3.selectAll(".bar")
             .filter(function(d) {
                 return d.year == year;
             })
             .transition()
             .duration(400).
-            style('fill', '#226764');
+            style("fill", "#226764");
 
     }, function(obj) {
 
-        d3.selectAll('.bar')
+        d3.selectAll(".bar")
             .transition()
             .duration(200).
-            style('fill', '#A8383B');
+            style("fill", "#A8383B");
     });
 
     // Add click event to cards
-    $('.card').click(function(obj) {
+    $(".card").click(function(obj) {
 
         // Remove class
-        $('.card').children().removeClass("currentCard");
+        $(".card").children().removeClass("currentCard");
 
         // Remove events for cards
-        $('.card').off();
+        $(".card").off();
 
         // Get target element
         var targetElement = $(obj.target);

@@ -7,14 +7,6 @@ body {
   font-family: 'Taviraj', serif;
 }
 
-h1 {
-  font-family: 'Taviraj', serif;
-  text-align: center;
-  font-weight: bold;
-  padding: 20px;
-  color: $primary-color;
-}
-
 p {
   font-weight: normal;
   font-size: 1.6rem;
@@ -43,10 +35,6 @@ p {
 .bar {
   fill: $primary-color;
   stroke: $stroke-color;
-
-  // &:hover {
-  //   fill: $secondary-color;
-  // }
 }
 
 .label {
@@ -57,7 +45,6 @@ p {
 /*
  * Tooltip
  */
-
 div.tooltip { 
     position: absolute;     
     text-align: center;     
@@ -87,8 +74,6 @@ svg {
 /*
  * Card for every year
  */
-
-
 @mixin card() {
 
   overflow: hidden;
@@ -97,10 +82,10 @@ svg {
   border-radius: 2px;
   margin-bottom: 20px;
 
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 
   &:hover {
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 
   }
 
@@ -139,4 +124,12 @@ svg {
 .currentCard {
   background-color: $secondary-color;
   color: #fff;
+}
+
+#weekSummary {
+  height: 50px;
+  text-align: center;
+  font-size: 2.8rem;
+  color: $secondary-color;
+  font-weight: bold;
 }
