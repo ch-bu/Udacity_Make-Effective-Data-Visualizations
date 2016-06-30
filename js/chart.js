@@ -215,6 +215,9 @@ function change() {
      * Sorts the x axis from ascending
      */
 
+    // Uncheck checkbox
+    var sortChecked = $("#myCheckbox").prop("checked");
+
     // Rearrange domain
     var x0 = x.domain(currData.sort(sortChecked ? function(a, b) {
             return b.duration - a.duration;
