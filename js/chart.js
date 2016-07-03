@@ -1,7 +1,7 @@
 // Set variables
 var margin = {top: 70, right: 20, bottom: 40, left: 40},
-    width = 1200 - margin.left - margin.right,
-    height = 700 - margin.top - margin.bottom;
+    width = 1100 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
 
 // Colors
 var primaryColor = "#C63D0F";
@@ -53,7 +53,8 @@ svg.append("text")
     .attr("text-anchor", "end")
     .attr("x", width)
     .attr("y", height + 20)
-    .text("Month of the year");
+    .attr("stroke", "#808080")
+    .text("Week of the year");
 
 // Add a y-axis label.
 svg.append("text")
@@ -61,6 +62,7 @@ svg.append("text")
     .attr("text-anchor", "end")
     .attr("y", 6)
     .attr("dy", ".75em")
+    .attr("stroke", "#808080")
     .attr("transform", "rotate(-90)")
     .text("weekly work (hours)");
 
@@ -130,7 +132,8 @@ function draw(data) {
 
     // Specify domains
     x.domain(data.map(function(d) { return d.week; }));
-    y.domain([0, d3.max(data, function(d) { return d.duration; })]);
+    // y.domain([0, d3.max(data, function(d) { return d.duration; })]);
+    y.domain([0, 55]);
 
     // Sort data according to checkbox
     var x0 = x.domain(currData.sort(sortChecked ? function(a, b) {
@@ -147,6 +150,18 @@ function draw(data) {
     // Append x-axis to svg
     svg.select(".x.axis").transition().duration(300).call(xAxis);
     svg.select(".y.axis").transition().duration(300).call(yAxis);
+
+    // Remove existing lines
+    svg.selectAll(".hourLine").remove();
+
+    // Add horizontal line
+    svg.append("svg:line")
+        .attr("x0", 0)
+        .attr("x1", width)
+        .attr("y1", y(40))
+        .attr("y2", y(40))
+        .attr("class", "hourLine")
+        .style("stroke", "#ccc");
 
     // Bind data to nonexisting bars
     var bar = svg.selectAll(".bar")
@@ -212,7 +227,6 @@ function draw(data) {
 
             weekSummary.text("");
         });
-
 
     // Update set
     bar.transition().duration(300)
