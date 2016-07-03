@@ -33,5 +33,4 @@ Most users did not use the sort functionality. This came as a surprise as the ov
 
 * [Sort functionality](http://bl.ocks.org/mbostock/3885705)
 * [Axis legend](https://bost.ocks.org/mike/nations/)
-* [Grid](http://bl.ocks.org/hunzy/11110940)
 * [Update barcharts](https://bl.ocks.org/RandomEtc/cff3610e7dd47bef2d01)
