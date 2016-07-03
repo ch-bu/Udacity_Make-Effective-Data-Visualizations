@@ -3,6 +3,11 @@ var margin = {top: 70, right: 20, bottom: 40, left: 40},
     width = 1200 - margin.left - margin.right,
     height = 700 - margin.top - margin.bottom;
 
+// Colors
+var primaryColor = "#C63D0F";
+var secondaryColor = "#3B3738";
+var thirdColor = "#558C89";
+
 var weekSummary = $("#weekSummary");
 
 var categorialColors = d3.scale.category20b();
@@ -164,6 +169,16 @@ function draw(data) {
         .attr("width", x.rangeBand())
         .attr("y", function(d) { return y(d.duration); })
         .attr("height", function(d) { return height - y(d.duration); })
+        .style("fill", function(d) {
+
+            // Number of week
+            var thisWeek = parseInt(d.week.slice(12, 14));
+
+            // Highlight weeks I worked 100%
+            if (d.year >= 2016 && thisWeek >= 14) {
+                return thirdColor;
+            }
+        })
         .on("mouseover", function(currWeek) {
             
             // Color current week
@@ -171,7 +186,7 @@ function draw(data) {
                 .filter(function(d) {
                     return d.week == currWeek.week;
                 })
-                .style("fill", "#226764");
+                .style("fill", secondaryColor);
 
             weekSummary.text("You worked " +
                 Number(currWeek.duration).toFixed(1) +
@@ -183,7 +198,17 @@ function draw(data) {
 
             // Reapply normal color on mouseout
             d3.selectAll(".bar")
-                .style("fill", "#A8383B");
+                .style("fill", function(d) {
+
+                    var thisWeek = parseInt(d.week.slice(12, 14));
+
+                    // Highlight weeks I worked 100%
+                    if (d.year >= 2016 && thisWeek >= 14) {
+                        return thirdColor;
+                    } else {
+                        return primaryColor;
+                    }
+                });
 
             weekSummary.text("");
         });
@@ -200,6 +225,17 @@ function draw(data) {
         .attr("width", x.rangeBand())
         .attr("height", function(d) {
             return height - y(d.duration);
+        })
+        .style("fill", function(d) {
+
+            var thisWeek = parseInt(d.week.slice(12, 14));
+
+            // Highlight weeks I worked 100%
+            if (d.year >= 2016 && thisWeek >= 14) {
+                return thirdColor;
+            } else {
+                return primaryColor;
+            }
         });
 
     // Add events for cards after a second
@@ -275,28 +311,6 @@ function addHandlers() {
      * Add event listeners for cards
      */
 
-    // Add hover functionality
-    $(".card").hover(function(obj) {
-
-        // Find year from card mouse is over
-        var year = Number($(obj.target).find("span").text());
-
-        d3.selectAll(".bar")
-            .filter(function(d) {
-                return d.year == year;
-            })
-            .transition()
-            .duration(400).
-            style("fill", "#226764");
-
-    }, function(obj) {
-
-        d3.selectAll(".bar")
-            .transition()
-            .duration(200).
-            style("fill", "#A8383B");
-    });
-
     // Add click event to cards
     $(".card").click(function(obj) {
 
@@ -320,7 +334,7 @@ function addHandlers() {
             year = Number(targetElement.text());
         }
 
-        // // Update data
+        // Update data
         var dataSelection = weekData.filter(function(d) {
             return d.year == year;
         });
@@ -333,6 +347,8 @@ function addHandlers() {
 }
 
 function type(d) {
+
+    // Typecast strings to number
     d.duration = +d.duration;
     d.year = +d.year;
     return d;

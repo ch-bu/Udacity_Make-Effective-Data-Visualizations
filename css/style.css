@@ -20,8 +20,8 @@ p {
  * Bar for barchart
  */
 .bar {
-  fill: #A8383B;
-  stroke: #a8a8a8; }
+  fill: #C63D0F;
+  stroke: #cccccc; }
 
 .label {
   fill: #ddd;
@@ -98,12 +98,12 @@ svg {
     margin: 0; }
 
 .currentCard {
-  background-color: #226764;
+  background-color: #3B3738;
   color: #fff; }
 
 #weekSummary {
   height: 50px;
   text-align: center;
   font-size: 2.8rem;
-  color: #226764;
+  color: #3B3738;
   font-weight: bold; }
